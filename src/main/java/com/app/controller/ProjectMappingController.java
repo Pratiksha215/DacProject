@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import com.app.pojos.ProjectMapping;
 @RestController // => @Controller at class level +
 //@ResponseBody annotation added on ret types of all req handling methods
 @RequestMapping("/projectsmap")
+@CrossOrigin(origins = "http://localhost:4200")
 @Validated //To enable :  validation err handling on request params or path variables
 public class ProjectMappingController {
 	// dependency: repository(DAO layer i/f)
@@ -47,7 +49,8 @@ public class ProjectMappingController {
 		
 			// empty product list : set sts code : HTTP 204 (no contents)
 			//return new ResponseEntity<>(projects, HttpStatus.OK);
-			return ResponseEntity.ok(projectmapping);//sts code : 200 , body : list of projects
+			//return ResponseEntity.ok(projectmapping);//sts code : 200 , body : list of projects
+		return new ResponseEntity<>(new ResponseDTO("success","List of all projectsmapping", projectmapping),HttpStatus.OK);
 	}
 
 	// get prduct details by its name : supplied by clnt using path var
@@ -77,7 +80,9 @@ public class ProjectMappingController {
 	@PostMapping
 	public ResponseEntity<?> addProjectMapping(@RequestBody ProjectMapping projectmap) {
 		   System.out.println("in add product " + projectmap);
-			return new ResponseEntity<>(projectsmappingdao.save(projectmap),HttpStatus.CREATED);
+			//return new ResponseEntity<>(projectsmappingdao.save(projectmap),HttpStatus.CREATED);
+		   return new ResponseEntity<>(new ResponseDTO("success","projectmapping added successfully",projectsmappingdao.save(projectmap)),HttpStatus.CREATED);
+
 		}
 	
 	// update existing projects details : post / put
@@ -87,7 +92,7 @@ public class ProjectMappingController {
 	public ResponseEntity<?> updateProjectMappingDetails(@PathVariable int projectMappingId, @RequestBody ProjectMapping projectmap) {
 		System.out.println("in update projects" + projectMappingId + " " + projectmap);
 		// check if project exists
-				Optional<ProjectMapping> optional = projectsmappingdao.findById(projectMappingId);
+				Optional<ProjectMapping> optional = projectsmappingdao.findByprojectMappingid(projectMappingId);
 				if (optional.isPresent()) {
 					// project id valid : update the same
 					ProjectMapping existingProjectMapping = optional.get();// DETACHED
@@ -108,7 +113,7 @@ public class ProjectMappingController {
 	public ResponseEntity<?> deleteProjectMappingDetails(@PathVariable  int projectMappingId) {
 		System.out.println("in delete emp " + projectMappingId);
 		// check if emp exists
-		Optional<ProjectMapping> optional = projectsmappingdao.findById(projectMappingId);
+		Optional<ProjectMapping> optional = projectsmappingdao.findByprojectMappingid(projectMappingId);
 		if (optional.isPresent()) {
 			projectsmappingdao.deleteById(projectMappingId);
 			return new ResponseEntity<>(new ResponseDTO("success","ProjectMapping record deleted with ID ", + projectMappingId), HttpStatus.OK);

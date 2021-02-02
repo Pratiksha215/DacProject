@@ -2,10 +2,8 @@ package com.app.pojos;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,10 +11,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -48,20 +47,27 @@ public class People implements Serializable {
 	@JsonProperty(value = "modifiedOn")
 	private LocalDate modifiedOn;
 	private String modifiedBy;
-
-//	@OneToMany(mappedBy = "identifiedBypersonId", cascade = CascadeType.ALL)
-//	private List<Issues> issues = new ArrayList<>();
-
-	@OneToMany(mappedBy = "assignedtopeople", cascade = CascadeType.ALL)
-	private List<Issues> ownerOfIssue = new ArrayList<>();
 	
 
-	@OneToMany(mappedBy = "identifiedBypersonId", cascade = CascadeType.ALL)
-	private List<Issues> issueId = new ArrayList<>();
+	public People() {
+		System.out.println("in "+getClass().getName());
+	}
 	
-	@OneToMany(mappedBy = "personId", cascade = CascadeType.ALL)
-	private List<ProjectMapping> projectMappingId  = new ArrayList<>();
-
+	public People(Integer personId, String personName, String password, String personEmail, PersonRole role,
+			int assignedProjects, LocalDate createdOn, String createdBy, LocalDate modifiedOn, String modifiedBy) {
+		super();
+		this.personId = personId;
+		this.personName = personName;
+		this.password = password;
+		this.personEmail = personEmail;
+		this.role = role;
+		this.assignedProjects = assignedProjects;
+		this.createdOn = createdOn;
+		this.createdBy = createdBy;
+		this.modifiedOn = modifiedOn;
+		this.modifiedBy = modifiedBy;
+	}
+	
 	public Integer getPersonId() {
 		return personId;
 	}
@@ -142,39 +148,13 @@ public class People implements Serializable {
 		this.modifiedBy = modifiedBy;
 	}
 
-	public List<Issues> getOwnerOfIssue() {
-		return ownerOfIssue;
-	}
-
-	public void setOwnerOfIssue(List<Issues> ownerOfIssue) {
-		this.ownerOfIssue = ownerOfIssue;
-	}
-
-	public List<Issues> getIssueId() {
-		return issueId;
-	}
-
-	public void setIssueId(List<Issues> issueId) {
-		this.issueId = issueId;
-	}
-
-	public List<ProjectMapping> getProjectMappingId() {
-		return projectMappingId;
-	}
-
-	public void setProjectMappingId(List<ProjectMapping> projectMappingId) {
-		this.projectMappingId = projectMappingId;
-	}
-
 	@Override
 	public String toString() {
 		return "People [personId=" + personId + ", personName=" + personName + ", password=" + password
 				+ ", personEmail=" + personEmail + ", role=" + role + ", assignedProjects=" + assignedProjects
 				+ ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", modifiedOn=" + modifiedOn
-				+ ", modifiedBy=" + modifiedBy + ", ownerOfIssue=" + ownerOfIssue + ", issueId=" + issueId
-				+ ", projectMappingId=" + projectMappingId + "]";
+				+ ", modifiedBy=" + modifiedBy + "]";
 	}
 
-	
 
 }

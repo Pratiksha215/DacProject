@@ -3,34 +3,48 @@ package com.app.pojos;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 @SuppressWarnings("serial")
 @Embeddable
 @Entity
 @Table(name="projectMapping")
+
 public class ProjectMapping implements Serializable
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer projectMappingid;
 	
-	//private Integer personId;
-	//private Integer projectId;
 	
 	
-	@ManyToOne(optional=false)
-	@JoinColumn(name="personId",referencedColumnName="personId",nullable = false)
-	//@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private People personId;
+	@OneToOne
+	@JoinColumn(name="projectId")
+	private Projects projects;
 	
-	@ManyToOne(optional=false)
-	@JoinColumn(name="projectId",referencedColumnName="projectId",nullable = false)
-	//@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Projects projectId;
+	@OneToOne
+	@JoinColumn(name="personId")
+	private People people;
+	
 	
 	
 	@Column(name = "startDate")
@@ -42,6 +56,22 @@ public class ProjectMapping implements Serializable
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonProperty(value = "endDate")
 	private LocalDate endDate;
+	
+	
+
+	public ProjectMapping() {
+		System.out.println("in "+getClass().getName());
+	}
+
+	public ProjectMapping(Integer projectMappingid, Projects projects, People people, LocalDate startDate,
+			LocalDate endDate) {
+		super();
+		this.projectMappingid = projectMappingid;
+		this.projects = projects;
+		this.people = people;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
 
 	public Integer getProjectMappingid() {
 		return projectMappingid;
@@ -51,20 +81,20 @@ public class ProjectMapping implements Serializable
 		this.projectMappingid = projectMappingid;
 	}
 
-	public People getPersonId() {
-		return personId;
+	public Projects getProjects() {
+		return projects;
 	}
 
-	public void setPersonId(People personId) {
-		this.personId = personId;
+	public void setProjects(Projects projects) {
+		this.projects = projects;
 	}
 
-	public Projects getProjectId() {
-		return projectId;
+	public People getPeople() {
+		return people;
 	}
 
-	public void setProjectId(Projects projectId) {
-		this.projectId = projectId;
+	public void setPeople(People people) {
+		this.people = people;
 	}
 
 	public LocalDate getStartDate() {
@@ -85,9 +115,11 @@ public class ProjectMapping implements Serializable
 
 	@Override
 	public String toString() {
-		return "ProjectMapping [projectMappingid=" + projectMappingid + ", personId=" + personId + ", projectId="
-				+ projectId + ", startDate=" + startDate + ", endDate=" + endDate + "]";
+		return "ProjectMapping [projectMappingid=" + projectMappingid + ", projects=" + projects + ", people=" + people
+				+ ", startDate=" + startDate + ", endDate=" + endDate + "]";
 	}
-}
 
 	
+	
+	
+}

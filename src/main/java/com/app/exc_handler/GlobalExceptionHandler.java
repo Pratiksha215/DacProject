@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import com.app.custom_excs.IssuesNotFoundException;
+import com.app.custom_excs.PersonNotFoundException;
+import com.app.custom_excs.ProjectMappingNotFoundException;
 import com.app.custom_excs.ProjectsNotFoundException;
 import com.app.dto.ErrorResponse;
 
@@ -25,6 +28,25 @@ public class GlobalExceptionHandler {//extends ResponseEntityExceptionHandler {
 		ErrorResponse errResp = new ErrorResponse(exc.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(errResp, HttpStatus.NOT_FOUND);
 	}
+	
+		@ExceptionHandler(ProjectMappingNotFoundException.class)
+		public ResponseEntity<?> handleResourceNotFoundException1(ProjectMappingNotFoundException exc, WebRequest request) {
+			System.out.println("in handle res not found");
+			ErrorResponse errResp = new ErrorResponse(exc.getMessage(), request.getDescription(false));
+			return new ResponseEntity<>(errResp, HttpStatus.NOT_FOUND);
+		}
+		@ExceptionHandler(IssuesNotFoundException.class)
+		public ResponseEntity<?> handleResourceNotFoundException2(IssuesNotFoundException exc, WebRequest request) {
+			System.out.println("in handle res not found");
+			ErrorResponse errResp = new ErrorResponse(exc.getMessage(), request.getDescription(false));
+			return new ResponseEntity<>(errResp, HttpStatus.NOT_FOUND);
+		}
+		@ExceptionHandler(PersonNotFoundException.class)
+		public ResponseEntity<?> handleResourceNotFoundException3(PersonNotFoundException exc, WebRequest request) {
+			System.out.println("in handle res not found");
+			ErrorResponse errResp = new ErrorResponse(exc.getMessage(), request.getDescription(false));
+			return new ResponseEntity<>(errResp, HttpStatus.NOT_FOUND);
+		}
 
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<?> handleConstraintViolationExc(ConstraintViolationException e, WebRequest request) {
