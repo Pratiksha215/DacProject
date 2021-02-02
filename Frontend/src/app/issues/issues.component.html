@@ -1,0 +1,40 @@
+<div style="margin-top: 30px;" class="card">
+    <div class="card-header">
+      <button (click)="onAddBug()" style="margin-bottom: 10px;" type="button" class="btn btn-primary float-right">Add Bug</button>
+      <h4>Bugs Backlog</h4>
+    </div>
+    <div class="card-body">
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Bug Name</th>
+            <th>Description</th>
+            <th>Priority</th>
+            <th>Severity</th>
+            <th>Status</th>
+            <th>Project Id</th>
+            <th>Assigned To</th>
+            <th>Identified By</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bug of issues; let index = index">
+            <td>{{index + 1}}</td>
+            <td>{{bug['issueName']}}</td>
+            <td>{{bug['issueDescription']}}</td>
+            <td>{{bug['priority']}}</td>
+            <td>{{bug['severity']}}</td>
+            <td>{{bug['status']}}</td>
+            <td>{{bug['projects']['projectId']}}</td>
+            <td>{{bug['people']['personId']}}</td>
+            <td>{{bug['createdBy']}}</td>
+            <td>
+              <button (click)="onEdit(bug)" style="margin-left: 10px;" class="btn btn-warning btn-sm">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
